@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="暮邮谷：一段黄昏里的像素邮路。原创 2.5D 像素送信游戏。">
+<meta name="dusk-web-build" content="v0.3-r1-web3-gzip">
+<title>暮邮谷 · 像素邮路</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23182531'/%3E%3Cpath fill='%23edc27b' d='M5 9h22v15H5z'/%3E%3Cpath d='m5 9 11 9L27 9' fill='none' stroke='%23795046' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-size:16px;background:#14222d;color:#f2ede2}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}#canvas{display:block;width:100%;height:100%;border:0;touch-action:none}#canvas:focus{outline:none}.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:auto;padding:24px max(20px,env(safe-area-inset-right)) 24px max(20px,env(safe-area-inset-left));background:#14222d}.panel{max-width:520px;width:100%;margin:auto}h1{font-weight:700;font-size:clamp(2rem,9vw,3.5rem);letter-spacing:.12em;color:#edc27b;margin:0 0 10px}p{font-size:1rem;line-height:1.65;margin:12px 0}.eyebrow{font-size:.875rem;letter-spacing:.12em;color:#abbbbd;margin:0 0 14px}.controls{border-top:1px solid #465258;margin-top:22px;padding-top:12px;color:#d9e0dc}.note{color:#b5c3c3;font-size:.875rem;line-height:1.6}button{width:100%;min-height:52px;border:2px solid #edc27b;border-radius:4px;background:#edc27b;color:#16232b;font:700 1rem inherit;font-size:1rem;font-weight:700;cursor:pointer;margin:14px 0 4px;padding:12px 18px}button:focus-visible{outline:3px solid #ffffff;outline-offset:4px}button:disabled{cursor:wait;opacity:.65}#status{font-size:1rem;white-space:pre-line;overflow-wrap:anywhere}progress{display:block;width:100%;height:12px;accent-color:#edc27b;margin-top:20px}#reload{background:transparent;color:#edc27b}#status[data-error="true"]{padding:14px;border:1px solid #d99182;background:#382b31;color:#ffded4}body.playing #overlay{display:none}[hidden]{display:none!important}@media(max-height:450px){.overlay{align-items:flex-start;padding-top:16px;padding-bottom:16px}.panel{max-width:760px}h1{font-size:2rem}.controls{margin-top:12px;padding-top:4px}p{margin:6px 0}button{margin-top:10px}.eyebrow{margin-bottom:6px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="canvas" tabindex="0" aria-label="暮邮谷游戏画面">当前浏览器不支持游戏画布。</canvas>
+<main id="overlay" class="overlay">
+<section class="panel" aria-labelledby="title">
+<p class="eyebrow">像素邮路 · 原型 0.3</p>
+<h1 id="title">暮邮谷</h1>
+<p id="intro">沿着黄昏里的小路，送完三封信。</p>
+<div id="launch">
+<button id="start" type="button" disabled>正在检查浏览器…</button>
+<div class="controls">
+<p>手机推荐横屏。左半屏拖动移动，靠近物件后点右下角互动。</p>
+<p>电脑：WASD / 方向键移动，E / 空格互动，J / Tab 邮袋，Esc 菜单。</p>
+</div>
+<p class="note">进度保存在当前浏览器。隐私模式、清理网站数据或换设备可能丢失进度。首次载入约 10 MB。</p>
+</div>
+<p id="status" role="status" aria-live="polite"></p>
+<progress id="progress" aria-label="游戏资源载入进度" hidden></progress>
+<button id="reload" type="button" hidden>重新载入</button>
+<p class="note">需要 WebGL 2 和 WebAssembly。移动设备实玩与性能仍待验证。</p>
+<p class="note"><a href="https://github.com/ThySummer14/dusk-post-valley" style="color:#edc27b">查看源码、操作与更新记录</a> · <a href="GODOT_ENGINE_NOTICES.txt" style="color:#b5c3c3">第三方许可</a></p>
+<noscript><p>请在浏览器中允许 JavaScript，才能运行此游戏。</p></noscript>
+</section>
+</main>
+<script>
+window.duskScriptFailed=false;
+</script>
+<script src="dusk-wasm-loader.js?v=3" onerror="window.duskScriptFailed=true"></script>
+<script src="index.js?v=3" onerror="window.duskScriptFailed=true"></script>
+<script>
+'use strict';
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":479860,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_THREADS_ENABLED = false;
+(function () {
+ const status=document.getElementById('status'),start=document.getElementById('start'),launch=document.getElementById('launch'),progress=document.getElementById('progress'),reload=document.getElementById('reload');
+ let engine,started=false,slowTimer;
+ reload.addEventListener('click',()=>window.location.reload());
+ function fail(error){
+  clearTimeout(slowTimer); progress.hidden=true; launch.hidden=true; reload.hidden=false;
+  status.dataset.error='true'; status.textContent='游戏未能启动。\n'+(error instanceof Error?error.message:String(error));
+  console.error(error);
+ }
+ if(window.duskScriptFailed || typeof Engine==='undefined' || typeof DuskWasmDelivery==='undefined') {fail('引擎文件载入失败。请检查网络后重试。');return;}
+ const missing=Engine.getMissingFeatures({threads:GODOT_THREADS_ENABLED});
+ if(missing.length){fail('当前浏览器缺少以下能力：\n'+missing.join('\n')+'\n请使用支持 WebGL 2 和 WebAssembly 的浏览器打开。此页面尚未进入游戏。');return;}
+ engine=new Engine(GODOT_CONFIG);start.disabled=false;start.textContent='开始试玩';
+ start.addEventListener('click',()=>{
+  if(started)return;started=true;launch.hidden=true;progress.hidden=false;status.textContent='正在载入邮路…';
+  slowTimer=setTimeout(()=>{status.textContent='载入时间比平常久，仍在等待游戏启动。可先检查网络；若没有进展，请重新载入。';reload.hidden=false;},60000);
+  Engine.load(GODOT_CONFIG.executable).then(()=>{status.textContent='文件校验通过，正在启动引擎…';return engine.startGame({onProgress:(current,total)=>{if(current>0&&total>0){progress.value=current;progress.max=total;}else{progress.removeAttribute('value');progress.removeAttribute('max');}}});})
+  .then(()=>{clearTimeout(slowTimer);document.body.classList.add('playing');document.getElementById('canvas').focus();},fail);
+ });
+ window.addEventListener('unhandledrejection',event=>{if(started&&!document.body.classList.contains('playing'))fail(event.reason || '浏览器未能完成载入。');});
+}());
+</script>
+</body>
+</html>

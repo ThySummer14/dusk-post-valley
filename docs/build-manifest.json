@@ -1,0 +1,74 @@
+{
+  "game_version": "v0.3-r1",
+  "engine": "Godot4.6.3",
+  "threads": false,
+  "engine_decoded_bytes": 37700666,
+  "engine_decoded_sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
+  "files": [
+    {
+      "file": ".nojekyll",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "FONT_LICENSE.txt",
+      "bytes": 14712,
+      "sha256": "849f4ea9c214fa4ac3593b770c699f387534b11ce671264c1b10d85bdcb5997b"
+    },
+    {
+      "file": "FONT_PROVENANCE.txt",
+      "bytes": 1037,
+      "sha256": "1848961f6e9b8d80132ef0026703b827270626e1b4ed4220feeaa8ade0b0801b"
+    },
+    {
+      "file": "GODOT_ENGINE_NOTICES.txt",
+      "bytes": 112194,
+      "sha256": "8be5b607f674e31a36aa6d7acbf74c4e52b462caeac0715867599b7872609d17"
+    },
+    {
+      "file": "dusk-wasm-loader.js",
+      "bytes": 2478,
+      "sha256": "655a00bac364298fa2d2d7c4c0d8346c07fb9bfc7ade4b6506f030fc01c6735b"
+    },
+    {
+      "file": "index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    {
+      "file": "index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "file": "index.html",
+      "bytes": 6766,
+      "sha256": "e9b3812cb1d4bc4189c851eb671f4c408811866bb5ddde1288a74ef633ba5267"
+    },
+    {
+      "file": "index.js",
+      "bytes": 315908,
+      "sha256": "c472e8619ccf512036a196cca37b7329f8c34c9687072894f373370ca4d78960"
+    },
+    {
+      "file": "index.pck",
+      "bytes": 479860,
+      "sha256": "80cf051e3dcf603a4904fab5fe0f4fa94adefebecdc32a8fed58395342ece4d4"
+    },
+    {
+      "file": "index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    {
+      "file": "index.wasm.gz",
+      "bytes": 9382282,
+      "sha256": "9352825a316f4449b81d326706e78be95ed5a81c0e797f35879ef8b39bc505bd"
+    },
+    {
+      "file": "screenshots/night-post-route.png",
+      "bytes": 202825,
+      "sha256": "21480ef07757815bd6aab32fa91a01c5e728e7746ca669b802e6c7cce1e8ab97"
+    }
+  ]
+}

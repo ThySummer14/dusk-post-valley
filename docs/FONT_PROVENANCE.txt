@@ -1,0 +1,9 @@
+Font used: Noto Sans CJK SC Regular, subset of the installed Noto Sans CJK collection.
+Embedded name-table copyright: © 2014-2021 Adobe (http://www.adobe.com/).
+Embedded license: SIL Open Font License, Version 1.1.
+Source project: https://github.com/notofonts/noto-cjk
+Upstream Sans license checked: https://github.com/notofonts/noto-cjk/blob/main/Sans/LICENSE
+
+This project removes unused glyphs to keep the prototype small. It preserves the font's copyright and license fields. The original font is not this game's artwork.
+The bundled package copyright file and the upstream Sans license contain the general Reserved Font Name definition and conditions, but no explicit Reserved Font Name designation was found for this source. The font's embedded name table likewise carries no RFN statement. Font family names were therefore not changed merely because of the generic OFL clause.
+The complete package copyright/license is retained in assets/FONT_LICENSE.txt in the source package and FONT_LICENSE.txt in the standalone Web archive.
