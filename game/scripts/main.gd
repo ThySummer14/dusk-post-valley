@@ -2,6 +2,8 @@ extends Node
 
 const Quest = preload("res://scripts/quest_state.gd")
 const Touch = preload("res://scripts/touch_input.gd")
+const TouchButton = preload("res://scripts/touch_button.gd")
+const TouchScroll = preload("res://scripts/touch_scroll.gd")
 const World = preload("res://scripts/world_builder.gd")
 const SAVE_FILE := "user://dusk_valley_v1.json"
 const MOVE_SPEED := 3.0
@@ -389,7 +391,7 @@ func _label(text: String, font_size: int, color: Color) -> Label:
 	return label
 
 func _button(text: String, callback: Callable, width: float = 140.0) -> Button:
-	var button := Button.new()
+	var button := TouchButton.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(width, 45)
 	button.add_theme_font_size_override("font_size", 17)
@@ -449,7 +451,7 @@ func _show_modal(title: String, text: String, buttons: Array = []) -> VBoxContai
 	panel.add_child(column)
 	modal_title = _label(title, 26, Color("f0dcae"))
 	column.add_child(modal_title)
-	modal_scroll = ScrollContainer.new()
+	modal_scroll = TouchScroll.new()
 	modal_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	modal_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	modal_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL

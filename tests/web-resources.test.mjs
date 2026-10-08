@@ -36,6 +36,11 @@ try{
   for(const match of page.matchAll(/<script[^>]+src="([^"]+)"/g)){assert(!match[1].startsWith('/'));assert.equal((await fetch(base+match[1])).status,200);}
   const config=JSON.parse(page.match(/const GODOT_CONFIG = (\{[^\n]+\});/)[1]);assert.equal(config.executable,'index');assert.equal(config.fileSizes['index.pck'],fs.statSync(path.join(web,'index.pck')).size);
   assert(page.includes('const GODOT_THREADS_ENABLED = false'));assert(fs.existsSync(path.join(web,'.nojekyll')));
+  const project=fs.readFileSync(path.join(web,'../game/project.godot'),'utf8');
+  const version='v'+project.match(/^config\/version="([^"]+)"/m)[1];
+  assert.equal(manifest.game_version,version);assert(page.includes(version+'-web3-gzip'));
+  assert.deepEqual(fs.readFileSync(path.join(web,'index.pck')).subarray(0,4),Buffer.from('GDPC'));
+  assert.deepEqual(compressed.subarray(0,2),Buffer.from([0x1f,0x8b]));assert.deepEqual(decoded.subarray(0,4),Buffer.from([0,0x61,0x73,0x6d]));
  });
  await pass('Every published resource matches its manifest at a project-subdirectory URL',async()=>{
   for(const item of manifest.files){const r=await fetch(base+encodeURI(item.file));assert.equal(r.status,200,item.file);const b=Buffer.from(await r.arrayBuffer());assert.equal(b.length,item.bytes);assert.equal(createHash('sha256').update(b).digest('hex'),item.sha256,item.file);}
