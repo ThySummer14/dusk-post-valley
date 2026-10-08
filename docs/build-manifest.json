@@ -1,5 +1,5 @@
 {
-  "game_version": "v0.3-r1",
+  "game_version": "v0.3-r2",
   "engine": "Godot4.6.3",
   "threads": false,
   "engine_decoded_bytes": 37700666,
@@ -9,6 +9,11 @@
       "file": ".nojekyll",
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "DEVELOPMENT_LESSONS_ZH.md",
+      "bytes": 11374,
+      "sha256": "5db4ebc7c0ebd7dfd1a5e802110a00bef60197be36d9cacd0da4d5a908c8f3b3"
     },
     {
       "file": "FONT_LICENSE.txt",
@@ -24,6 +29,11 @@
       "file": "GODOT_ENGINE_NOTICES.txt",
       "bytes": 112194,
       "sha256": "8be5b607f674e31a36aa6d7acbf74c4e52b462caeac0715867599b7872609d17"
+    },
+    {
+      "file": "WATER_STUDY_ZH.md",
+      "bytes": 4488,
+      "sha256": "245ebf498c40815e7834f90ccc968388fa7265dc0db30e992c44a70f9a4d57db"
     },
     {
       "file": "dusk-wasm-loader.js",
@@ -43,7 +53,7 @@
     {
       "file": "index.html",
       "bytes": 6766,
-      "sha256": "e9b3812cb1d4bc4189c851eb671f4c408811866bb5ddde1288a74ef633ba5267"
+      "sha256": "b1e92c310599e57aa0a0fbfab655fafc65e68d9e358b08127a6ac698d1e2c80c"
     },
     {
       "file": "index.js",
@@ -52,8 +62,8 @@
     },
     {
       "file": "index.pck",
-      "bytes": 479860,
-      "sha256": "80cf051e3dcf603a4904fab5fe0f4fa94adefebecdc32a8fed58395342ece4d4"
+      "bytes": 482516,
+      "sha256": "c37b13bac458c972b61819424b762c7e760cede762d1d9f71f55037cd6b79ec2"
     },
     {
       "file": "index.png",
@@ -69,6 +79,26 @@
       "file": "screenshots/night-post-route.png",
       "bytes": 202825,
       "sha256": "21480ef07757815bd6aab32fa91a01c5e728e7746ca669b802e6c7cce1e8ab97"
+    },
+    {
+      "file": "screenshots/water-day-after.png",
+      "bytes": 198277,
+      "sha256": "b92aa8c7253a9c0bcf6c8baf0086ce4a84c1fb0b441b83c43bbb6f732a1c5113"
+    },
+    {
+      "file": "screenshots/water-day-before.png",
+      "bytes": 196509,
+      "sha256": "1f61d8aa96542ca17ce98a855adf4fd5a1f80d9ab7ab9c195037d04559927111"
+    },
+    {
+      "file": "screenshots/water-night-after.png",
+      "bytes": 169318,
+      "sha256": "7f6cc2e0ae0d031de3fc5b075e675bbb5782418c6371663df339f96155ab4849"
+    },
+    {
+      "file": "screenshots/water-night-before.png",
+      "bytes": 169390,
+      "sha256": "92e969063064e4061575cff86d490a705fad75c89da35bab5dac47404de4e084"
     }
   ]
 }

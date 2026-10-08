@@ -8,12 +8,12 @@ Godot4.6.3和Python3即可更新游戏数据包；Node22用于资源测试。请
 
 ```sh
 godot --headless --path game --editor --import --quit
-godot --headless --path game --export-pack Web docs/index.pck
+godot --headless --path game --export-pack Web ../docs/index.pck
 python3 tools/update_build.py
 node tests/web-resources.test.mjs
 ```
 
-导出使用game/export_presets.cfg。它排除qa、测试、制作文档及生成脚本，不包含玩家存档。保留官方4.6.3引擎时，仅需重新导出PCK；升级Godot引擎须同时更新对应JS、WASM、解码长度/SHA与第三方通知，重新验证完整加载链。
+导出使用game/export_presets.cfg。导出目标相对于 `--path` 指定的工程目录，因此从 `game/` 到发布目录须写 `../docs/index.pck`，也可传绝对路径。它排除qa、测试、制作文档及生成脚本，不包含玩家存档。保留官方4.6.3引擎时，仅需重新导出PCK；升级Godot引擎须同时更新对应JS、WASM、解码长度/SHA与第三方通知，重新验证完整加载链。
 
 ## 本地试玩
 

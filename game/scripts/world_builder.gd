@@ -3,6 +3,8 @@ extends Node3D
 
 const Rules = preload("res://scripts/world_rules.gd")
 const EAST_ROUTE := [Vector2(7.0, 2.0), Vector2(7.0, -3.8), Vector2(9.0, -5.95)]
+const BANK_CENTERS_X := Vector2(2.65, 6.0)
+const BANK_HALF_WIDTH := 0.35
 var rules := Rules.new()
 var materials: Dictionary = {}
 var interactables: Array[Dictionary] = []
@@ -207,7 +209,9 @@ func _make_terrain() -> void:
 	box(self, Vector3(17, -1.15, 0), Vector3(22, 2, 52), Color("3e5553"))
 	water_material = ShaderMaterial.new()
 	water_material.shader = preload("res://shaders/water.gdshader")
+	water_material.set_shader_parameter("bank_inner_x", Vector2(BANK_CENTERS_X.x + BANK_HALF_WIDTH, BANK_CENTERS_X.y - BANK_HALF_WIDTH))
 	var water := MeshInstance3D.new()
+	water.name = "CreekSurface"
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(3.0, 54)
 	water.mesh = plane
@@ -216,9 +220,9 @@ func _make_terrain() -> void:
 	add_child(water)
 	# Faceted banks and distant silhouettes form a closed valley composition.
 	for z in range(-26, 27, 2):
-		for x in [2.65, 6.0]:
+		for x in [BANK_CENTERS_X.x, BANK_CENTERS_X.y]:
 			var p := Vector2(x, z)
-			box(self, ground(p, -0.28), Vector3(0.7, 0.65 + Rules.height_at(p), 2.1), Color("68766b"))
+			box(self, ground(p, -0.28), Vector3(BANK_HALF_WIDTH * 2.0, 0.65 + Rules.height_at(p), 2.1), Color("68766b"))
 	for i in range(18):
 		var p := Vector2(-27 + i * 3, -21.5 - random.randf() * 2)
 		cylinder(self, ground(p, 2.2), 3.5, 6.5 + random.randf() * 3, Color("537b7f"), 0.0)
