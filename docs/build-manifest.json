@@ -1,5 +1,5 @@
 {
-  "game_version": "v0.3-r4",
+  "game_version": "v0.3-r5",
   "engine": "Godot4.6.3",
   "threads": false,
   "engine_decoded_bytes": 37700666,
@@ -53,7 +53,7 @@
     {
       "file": "index.html",
       "bytes": 6769,
-      "sha256": "e87cc3445649066aee67569694452761d1e1c044d9ec63ebfcc4547163df7702"
+      "sha256": "2d5773da558c280e4743243123da2a5b30f535742ae0550e7ba0b0fe61e5da62"
     },
     {
       "file": "index.js",
@@ -62,8 +62,8 @@
     },
     {
       "file": "index.pck",
-      "bytes": 488404,
-      "sha256": "9b559781acc1505bc3efb78192736c160b97ff6872d1c342b4afaa157aaf064a"
+      "bytes": 489060,
+      "sha256": "b5e7152d03ea77ef53eb4dbee16b7fdd1ea48b10d35b16babac34223de694d13"
     },
     {
       "file": "index.png",

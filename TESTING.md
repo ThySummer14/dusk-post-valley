@@ -42,3 +42,15 @@ HOME="$qa_dir/home" XDG_DATA_HOME="$qa_dir/data" XDG_CONFIG_HOME="$qa_dir/config
 ```
 
 源码与新导出的r4 PCK分别运行同一92项存档回归；PCK另核版本与编译后的触控事件。6项Web资源检查针对新版清单与包体。以上不等同于WebGL/IndexedDB与手机实机验证。
+
+## v0.3-r5中断回归
+
+新增23项中断检查，使用InputEventKey和ScreenTouch/ScreenDrag走实际输入管线：暂停及邮袋/说明/重开确认的输入清空、恢复后旧键与自动重复不再行走、旋转和同方向窗口缩放清理按钮/滚动捕获、新触摸与新按键恢复、焦点切回不重放移动。
+
+```sh
+godot --headless --path game --script res://tests/interruption_tests.gd -- --test-world
+```
+
+既有201项玩法/触摸和92项存档检查继续运行。源码与正式PCK分开验证，不将原生输入注入等同真机触屏、声音、性能或IndexedDB测试。
+
+本轮Web检查以`node --max-old-space-size=96 --wasm-num-compilation-tasks=1 --liftoff-only tests/web-resources.test.mjs`限制编译并发及堆大小，6项通过；仍编译完整官方WASM，未启用浏览器安全绕过。默认Node运行曾触及400MiB预算并被停止，不计为通过。r4/r5包内水面shader、世界构建器及全部美术资源SHA一致。

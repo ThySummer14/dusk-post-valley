@@ -7,6 +7,7 @@ const TouchScroll = preload("res://scripts/touch_scroll.gd")
 const World = preload("res://scripts/world_builder.gd")
 const SAVE_FILE := "user://dusk_valley_v1.json"
 const MOVE_SPEED := 3.0
+const MOVEMENT_ACTIONS := ["walk_left", "walk_right", "walk_up", "walk_down"]
 const RECIPIENT_NAMES := {"cedar": "杉婆婆", "river": "阿澄", "star": "陆先生"}
 const RECIPIENT_HINTS := {"cedar": "去北坡红瓦屋，给杉婆婆送信。", "river": "过木桥，到蓝瓦屋找阿澄。", "star": "沿东岸上坡，去紫瓦观星屋。"}
 const LETTER_TEXT := {
@@ -24,6 +25,7 @@ var input_probe_file: FileAccess
 var input_probe_started := 0
 var quest := Quest.new()
 var touch := Touch.new()
+var interrupted_movement: Dictionary = {}
 var world: ValleyWorld
 var subviewport: SubViewport
 var camera: Camera3D
@@ -202,7 +204,7 @@ func _resize_world() -> void:
 	else:
 		subviewport.size = Vector2i(360, int(360 / ratio))
 		camera.size = 17.0 / ratio
-	touch.cancel()
+	_cancel_controls()
 	resizing_ui = false
 	if is_instance_valid(hud):
 		_layout_ui()
@@ -419,7 +421,7 @@ func _button(text: String, callback: Callable, width: float = 140.0) -> Button:
 
 func _show_modal(title: String, text: String, buttons: Array = []) -> VBoxContainer:
 	_probe("modal_open", {"title": title})
-	touch.cancel()
+	_cancel_controls()
 	modal_open = true
 	prompt_label.visible = false
 	action_button.visible = false
@@ -547,7 +549,7 @@ func _show_journal() -> void:
 
 func _close_modal() -> void:
 	_probe("modal_close", {})
-	touch.cancel()
+	_cancel_controls()
 	modal_open = false
 	modal_layer.visible = false
 	prompt_label.visible = running
@@ -559,6 +561,13 @@ func _close_modal() -> void:
 		pending_delivery_receipt = ""
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		for action in MOVEMENT_ACTIONS:
+			if event.is_action(action):
+				if event.echo and interrupted_movement.has(action):
+					Input.action_release(action)
+				elif not event.echo:
+					interrupted_movement.erase(action)
 	if input_probe_enabled and (event is InputEventMouseButton or event is InputEventKey):
 		var details := {"event": event.as_text(), "pressed": event.is_pressed(), "id": event.get_instance_id()}
 		if event is InputEventKey:
@@ -619,13 +628,20 @@ func _input(event: InputEvent) -> void:
 			_interact()
 		get_viewport().set_input_as_handled()
 
+func _cancel_controls() -> void:
+	# A modal, resize, or focus interruption invalidates the old input gesture.
+	touch.cancel()
+	for action in MOVEMENT_ACTIONS:
+		if Input.is_action_pressed(action):
+			interrupted_movement[action] = true
+		Input.action_release(action)
+	get_tree().call_group("valley_touch_capture", "cancel_touch")
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_FOCUS_IN:
 		_probe("focus", {"notification": what})
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		touch.cancel()
-		for action in ["walk_left", "walk_right", "walk_up", "walk_down"]:
-			Input.action_release(action)
+		_cancel_controls()
 		if running and is_instance_valid(modal_layer):
 			_show_pause()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:

@@ -8,6 +8,9 @@ var touch_start := Vector2.ZERO
 var scroll_start := 0
 var dragging := false
 
+func _ready() -> void:
+	add_to_group("valley_touch_capture")
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch and event.pressed and not event.canceled:
 		if touch_id == -1:
