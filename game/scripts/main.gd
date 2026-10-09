@@ -829,10 +829,15 @@ func _load_game() -> void:
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
 	if not file:
+		save_read_only = true
+		save_warning = "之前的存档暂时无法打开，已保留原文件。这趟暂不保存；可在菜单明确选择重新开始。"
 		return
-	var result: Variant = JSON.parse_string(file.get_as_text())
-	if result is Dictionary:
-		player_pos = quest.restore(result)
+	var parser := JSON.new()
+	var parse_error := parser.parse(file.get_as_text())
+	file.close()
+	var result := quest.restore_checked(parser.data if parse_error == OK else null)
+	if result.ok:
+		player_pos = result.position
 		if not world.rules.can_walk(player_pos):
 			player_pos = Vector2(-8, 7)
 		camera_focus = world.ground(player_pos, 0.65)
@@ -840,7 +845,7 @@ func _load_game() -> void:
 		has_save = true
 	else:
 		save_read_only = true
-		save_warning = "之前的存档无法读取，已保留原文件。这趟暂不保存；可在菜单明确选择重新开始。"
+		save_warning = result.error + "已保留原文件。这趟暂不保存；可在菜单明确选择重新开始。"
 
 func _draw_joystick() -> void:
 	if touch.pointer >= 0:

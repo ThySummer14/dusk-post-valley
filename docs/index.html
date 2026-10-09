@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="暮邮谷：一段黄昏里的像素邮路。原创 2.5D 像素送信游戏。">
-<meta name="dusk-web-build" content="v0.3-r3-web3-gzip">
+<meta name="dusk-web-build" content="v0.3-r4-web3-gzip">
 <title>暮邮谷 · 像素邮路</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23182531'/%3E%3Cpath fill='%23edc27b' d='M5 9h22v15H5z'/%3E%3Cpath d='m5 9 11 9L27 9' fill='none' stroke='%23795046' stroke-width='2'/%3E%3C/svg%3E">
 <style>
@@ -15,7 +15,7 @@
 <canvas id="canvas" tabindex="0" aria-label="暮邮谷游戏画面">当前浏览器不支持游戏画布。</canvas>
 <main id="overlay" class="overlay">
 <section class="panel" aria-labelledby="title">
-<p class="eyebrow">像素邮路 · 原型 0.3-r3</p>
+<p class="eyebrow">像素邮路 · 原型 0.3-r4</p>
 <h1 id="title">暮邮谷</h1>
 <p id="intro">沿着黄昏里的小路，送完三封信。</p>
 <div id="launch">
@@ -41,7 +41,7 @@ window.duskScriptFailed=false;
 <script src="index.js?v=3" onerror="window.duskScriptFailed=true"></script>
 <script>
 'use strict';
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":486180,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":488404,"index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 (function () {
  const status=document.getElementById('status'),start=document.getElementById('start'),launch=document.getElementById('launch'),progress=document.getElementById('progress'),reload=document.getElementById('reload');
