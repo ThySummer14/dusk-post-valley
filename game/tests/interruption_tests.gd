@@ -114,6 +114,18 @@ func run() -> void:
 	game._process(0.05)
 	check(game.player_pos == start, "Focus return and resume do not replay stale movement")
 	key(KEY_D, false)
+	var persist_path := "user://interrupt-persist-position.json"
+	game.save_path = persist_path
+	game.testing = false
+	DirAccess.remove_absolute(persist_path)
+	game.quest.collect("cedar")
+	var walked: Vector2 = game.player_pos + Vector2(1.25, -0.5)
+	game.player_pos = walked
+	game._show_pause()
+	var saved: Variant = JSON.parse_string(FileAccess.get_file_as_string(persist_path))
+	check(saved is Dictionary and absf(saved.position[0] - walked.x) < 0.01 and absf(saved.position[1] - walked.y) < 0.01, "Pause persists latest walk position without quest change")
+	game.testing = true
+	DirAccess.remove_absolute(persist_path)
 	game.queue_free()
 	await process_frame
 	print("INTERRUPTION_RESULT ",passed," passed / ",failed," failed")

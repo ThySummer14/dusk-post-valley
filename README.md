@@ -1,6 +1,6 @@
 # 暮邮谷 · Dusk Post Valley
 
-一段雨后山谷里的像素邮路。寻找三封散落的信，点亮路灯、转动旧镜，把思念送到三扇窗前。独立原创 Godot4.6.3 原型，当前游戏版本 v0.3-r5。
+一段雨后山谷里的像素邮路。寻找三封散落的信，点亮路灯、转动旧镜，把思念送到三扇窗前。独立原创 Godot4.6.3 原型，当前游戏版本 v0.3-r6。
 
 **[打开试玩](https://thysummer14.github.io/dusk-post-valley/)** · [操作与运行](#操作) · [开发复盘](docs/DEVELOPMENT_LESSONS_ZH.md) · [构建说明](BUILDING.md) · [测试说明](TESTING.md) · [更新记录](CHANGELOG.md)
 

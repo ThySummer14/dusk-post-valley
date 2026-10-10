@@ -1,5 +1,5 @@
 {
-  "game_version": "v0.3-r5",
+  "game_version": "v0.3-r6",
   "engine": "Godot4.6.3",
   "threads": false,
   "engine_decoded_bytes": 37700666,
@@ -52,8 +52,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 6769,
-      "sha256": "2d5773da558c280e4743243123da2a5b30f535742ae0550e7ba0b0fe61e5da62"
+      "bytes": 7020,
+      "sha256": "43d4c2b064e8300f67723b3611f357dd3e54d252b9f2772d544006dc94c699d0"
     },
     {
       "file": "index.js",
@@ -62,8 +62,8 @@
     },
     {
       "file": "index.pck",
-      "bytes": 489060,
-      "sha256": "b5e7152d03ea77ef53eb4dbee16b7fdd1ea48b10d35b16babac34223de694d13"
+      "bytes": 491332,
+      "sha256": "a5722d76b3e42aca1b561938c53a4d4e5bc7b2ac723b097eeb743f2086270455"
     },
     {
       "file": "index.png",
@@ -74,6 +74,11 @@
       "file": "index.wasm.gz",
       "bytes": 9382282,
       "sha256": "9352825a316f4449b81d326706e78be95ed5a81c0e797f35879ef8b39bc505bd"
+    },
+    {
+      "file": "lessons-for-kuangye.md",
+      "bytes": 5370,
+      "sha256": "7fadcdb71246f00f44487629f39df6cbdab5fe2491b9df88cadfcc9c89d61814"
     },
     {
       "file": "screenshots/night-post-route.png",

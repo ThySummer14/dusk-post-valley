@@ -87,6 +87,7 @@ var video_elapsed := 0.0
 var video_next := 0.0
 var video_directory := ""
 var video_timestamps: Array[float] = []
+var layout_safe_insets := Vector4.ZERO
 
 func _ready() -> void:
 	input_probe_enabled = FileAccess.file_exists("res://qa/enable_input_probe.flag") or OS.get_cmdline_user_args().has("--input-probe")
@@ -123,6 +124,7 @@ func _ready() -> void:
 	if testing:
 		running = true
 		return
+	_install_web_interrupt_hook()
 	_show_title()
 
 func _setup_actions() -> void:
@@ -177,6 +179,7 @@ func _request_world_resize() -> void:
 
 func _commit_world_resize() -> void:
 	resize_scheduled = false
+	_refresh_layout_safe_insets()
 	_resize_world()
 
 func _resize_world() -> void:
@@ -213,7 +216,10 @@ func _layout_ui() -> void:
 	var size := Vector2(get_window().content_scale_size)
 	var narrow := size.x < 600.0
 	var compact := size.x < 1000.0
-	header_info.position = Vector2(16 if compact else 28, 16 if compact else 24)
+	var margin_left := 16.0 + layout_safe_insets.w
+	var margin_top := 16.0 + layout_safe_insets.x
+	var margin_right := 16.0 + layout_safe_insets.y
+	header_info.position = Vector2((28 if not compact else 16) + layout_safe_insets.w, margin_top if compact else 24.0 + layout_safe_insets.x)
 	header_info.size = Vector2(minf(300, size.x - 32), 100)
 	objective_label.custom_minimum_size.x = 0
 	objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -223,19 +229,19 @@ func _layout_ui() -> void:
 		button.custom_minimum_size = Vector2(72 if compact else 112, 44)
 	header_buttons.add_theme_constant_override("separation", 8)
 	var header_width := 152.0 if compact else 232.0
-	header_buttons.position = Vector2(size.x - header_width - 16, 16 if compact else 24)
+	header_buttons.position = Vector2(size.x - header_width - margin_right, margin_top if compact else 24.0 + layout_safe_insets.x)
 	header_buttons.size.x = header_width
 	var prompt_width := minf(620, size.x - 32)
-	prompt_label.position = Vector2((size.x - prompt_width) * 0.5, size.y - (145 if narrow else 88))
+	prompt_label.position = Vector2((size.x - prompt_width) * 0.5, size.y - (145 if narrow else 88) - layout_safe_insets.z)
 	prompt_label.size = Vector2(prompt_width, 38)
 	prompt_label.add_theme_font_size_override("font_size", 17 if compact else 20)
-	toast_label.position = Vector2((size.x - prompt_width) * 0.5, size.y - (190 if narrow else 130))
+	toast_label.position = Vector2((size.x - prompt_width) * 0.5, size.y - (190 if narrow else 130) - layout_safe_insets.z)
 	toast_label.size = Vector2(prompt_width, 42)
 	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	toast_label.add_theme_font_size_override("font_size", 15 if compact else 18)
-	action_button.position = Vector2(size.x - 104, size.y - 112)
+	action_button.position = Vector2(size.x - 104 - layout_safe_insets.y, size.y - 112 - layout_safe_insets.z)
 	action_button.custom_minimum_size = Vector2(88, 88)
-	controls_label.position = Vector2(16, size.y - 28)
+	controls_label.position = Vector2(margin_left, size.y - 28 - layout_safe_insets.z)
 	controls_label.add_theme_font_size_override("font_size", 12 if compact else 14)
 	controls_label.text = "左侧拖动行走 · 右下互动 · 建议横屏" if narrow else ("左侧拖动 / WASD行走 · E互动 · J邮袋" if compact else "WASD / 方向键 行走     E 互动     J 邮袋     F2 隐藏界面")
 	if modal_open and is_instance_valid(panel):
@@ -495,6 +501,7 @@ func _show_help() -> void:
 func _show_pause() -> void:
 	if not running:
 		return
+	_persist_progress()
 	var col := _show_modal("在屋檐下歇一会", "雨停后的山谷，不会催你赶路。", [["继续", _close_modal], ["操作说明", _show_help], ["重新开始", _confirm_restart]])
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
@@ -628,6 +635,78 @@ func _input(event: InputEvent) -> void:
 			_interact()
 		get_viewport().set_input_as_handled()
 
+func _persist_progress() -> void:
+	if not running or testing or save_read_only:
+		return
+	_save_game()
+
+func _handle_interrupt() -> void:
+	if not running:
+		return
+	_cancel_controls()
+	_persist_progress()
+	if is_instance_valid(modal_layer):
+		_show_pause()
+
+func _refresh_layout_safe_insets() -> void:
+	layout_safe_insets = Vector4.ZERO
+	if DisplayServer.get_name() == "headless":
+		return
+	if OS.has_feature("web"):
+		var raw: Variant = JavaScriptBridge.eval("""
+(function () {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
+  document.documentElement.appendChild(el);
+  const s = getComputedStyle(el);
+  const n = v => parseFloat(v) || 0;
+  const out = [n(s.paddingTop), n(s.paddingRight), n(s.paddingBottom), n(s.paddingLeft)];
+  el.remove();
+  return out;
+})()
+""", true)
+		if raw is Array and raw.size() == 4:
+			layout_safe_insets = Vector4(raw[0], raw[1], raw[2], raw[3])
+		return
+	var area := DisplayServer.get_display_safe_area()
+	var screen := DisplayServer.screen_get_size()
+	layout_safe_insets = Vector4(area.position.y, screen.x - area.end.x, screen.y - area.end.y, area.position.x)
+
+func _install_web_interrupt_hook() -> void:
+	if not OS.has_feature("web"):
+		return
+	var callback := JavaScriptBridge.create_callback(_on_web_visibility_flag)
+	var window := JavaScriptBridge.get_interface("window")
+	if window == null:
+		return
+	window.set("duskValleyInterrupt", callback)
+	JavaScriptBridge.eval("""
+(function () {
+  if (window.__duskValleyInterruptHook) return;
+  window.__duskValleyInterruptHook = true;
+  const fire = () => {
+    if (typeof window.duskValleyInterrupt === 'function') {
+      window.duskValleyInterrupt(document.visibilityState === 'hidden');
+    }
+  };
+  document.addEventListener('visibilitychange', fire);
+  window.addEventListener('pagehide', () => {
+    if (typeof window.duskValleyInterrupt === 'function') window.duskValleyInterrupt(true);
+  });
+})();
+""")
+
+func _on_web_visibility_flag(arg = true) -> void:
+	var hidden := true
+	if arg is Array:
+		if arg.is_empty():
+			return
+		hidden = bool(arg[0])
+	elif arg is bool:
+		hidden = arg
+	if hidden:
+		call_deferred("_handle_interrupt")
+
 func _cancel_controls() -> void:
 	# A modal, resize, or focus interruption invalidates the old input gesture.
 	touch.cancel()
@@ -641,11 +720,9 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_FOCUS_IN:
 		_probe("focus", {"notification": what})
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		_cancel_controls()
-		if running and is_instance_valid(modal_layer):
-			_show_pause()
+		_handle_interrupt()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
-		_save_game()
+		_persist_progress()
 
 func _process(delta: float) -> void:
 	if video_active:

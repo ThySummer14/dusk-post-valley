@@ -53,4 +53,8 @@ godot --headless --path game --script res://tests/interruption_tests.gd -- --tes
 
 既有201项玩法/触摸和92项存档检查继续运行。源码与正式PCK分开验证，不将原生输入注入等同真机触屏、声音、性能或IndexedDB测试。
 
+## v0.3-r6探索存盘与 Web 后台
+
+中断套件增至24项：在仅改变 `player_pos`、无任务事件时，打开暂停菜单也会把坐标写入 `user://` 存档。Web 壳页在引擎启动后监听 `visibilitychange`/`pagehide` 并对隐藏状态 blur 画布；游戏内 `JavaScriptBridge` 回调与 `NOTIFICATION_APPLICATION_FOCUS_OUT` 共用 `_handle_interrupt()`。安全区 inset 仅在 Web 导出路径通过 headless 无法断言，需真机横屏看右下角互动钮是否离 Home 条足够远。
+
 本轮Web检查以`node --max-old-space-size=96 --wasm-num-compilation-tasks=1 --liftoff-only tests/web-resources.test.mjs`限制编译并发及堆大小，6项通过；仍编译完整官方WASM，未启用浏览器安全绕过。默认Node运行曾触及400MiB预算并被停止，不计为通过。r4/r5包内水面shader、世界构建器及全部美术资源SHA一致。
